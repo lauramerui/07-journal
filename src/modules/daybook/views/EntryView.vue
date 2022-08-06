@@ -1,6 +1,7 @@
 <template >
     <div class="entry-title d-flex justify-content-between p-2">
         <div>
+            {{entryById}}
             <span class="text-success fs-3 fw-bold">3</span>
             <span class="mx-1 fs-3">Julio</span>
             <span class="mx-2 fs-4 fw-light">2021, Jueves</span>
@@ -20,7 +21,9 @@
 
     <hr>
     <div class="d-flex flex-column px-3 h-75">
-        <textarea placeholder="¿Qué sucedió hoy?"></textarea>
+        <textarea placeholder="¿Qué sucedió hoy?">
+           
+        </textarea>
     </div>
 
     <FabComponent icono="fa-save"></FabComponent>
@@ -29,15 +32,39 @@
         src="https://images.unsplash.com/photo-1477346611705-65d1883cee1e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZGFyayUyMGxhbmRzY2FwZXxlbnwwfHwwfHw%3D&w=1000&q=80" 
         alt="entry-picture"
         class="img-thumbnail"
-        >
+        />
 </template>
 
 <script>
 import { defineAsyncComponent } from 'vue'
+import { mapGetters } from 'vuex' //computed
 
 export default {
+    props: {
+        //parámetro de la ruta
+        id:{
+            type: String,
+            required: true
+        }
+    },
     components: {
         FabComponent: defineAsyncComponent(() => import('../components/FabComponent.vue'))
+    },
+    methods: {
+        loadEntry(){
+            const entry = this.getEntryById(this.id)
+            console.log(entry)
+        }
+    },
+    computed: {
+        ...mapGetters(['getEntryById']),
+        // entryById(){
+        //     return this.getEntryById(this.id)
+        // }
+    },
+    created() {
+        this.loadEntry()
+        console.log('id created: ' + this.$route.params.id )
     }
 }
 </script>

@@ -1,36 +1,67 @@
 <template lang="">
-    <div class="entry-container mb-3 pointer p-2" @click="$router.push({name:'entry',params:{id:10}})">
+    <div class="entry-container mb-3 pointer p-2" @click="$router.push({name:'entry', params:{id:entry.id}})">
         <!-- title -->
         <div class="entry-title d-flex">
-            <span class="text-success fs-5 fw-bold">2</span>
-            <span class="mx-1 fs-5">Agosto</span>
-            <span class="mx-2 fw-light">2022, Martes</span>
+            <span class="text-success fs-5 fw-bold">{{day}}</span>
+            <span class="mx-1 fs-5">{{month}}</span>
+            <span class="mx-2 fw-light">{{yearDay}}</span>
         </div>
 
         <div class="entry-description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex quasi laudantium autem maxime quo sit placeat officia saepe velit optio aperiam, deleniti earum corrupti consequatur beatae praesentium id nihil facilis.
+            {{ shortText }}
         </div>
     </div>
 
 
 </template>
-<script>
-export default {
 
+<script>
+
+const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+const days   = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado']
+
+export default {
+    props:{
+        entry:{
+            type:Object,
+            required:true
+        }
+    },
+    computed: {
+        shortText(){
+            return ( this.entry.text.length > 130 )
+                ?  this.entry.text.substring(0,130)+'...'
+                : this.entry.text
+        },
+        day(){
+            const date = new Date(this.entry.date)
+            console.log(new Date(this.entry.date).getDate())
+
+            return date.getDate()
+        },
+        month(){
+            const date = new Date(this.entry.date)
+            const monthNumber = date.getMonth()
+            return months[monthNumber]
+        },
+        yearDay(){
+            const date = new Date(this.entry.date)
+            return `${date.getFullYear()}, ${days[date.getDay()]}`  
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
-.entry-container {
-    border-bottom: 1px solid #2c3e50;
-    transition: 0.2s all ease-in;
-
-    &:hover {
-        background-color: lighten($color: grey, $amount: 45);
+    .entry-container {
+        border-bottom: 1px solid #2c3e50;
         transition: 0.2s all ease-in;
-    }
 
-    .entry-description {
-        font-size: 12px;
+        &:hover {
+            background-color: lighten($color: grey, $amount: 45);
+            transition: 0.2s all ease-in;
+        }
+        .entry-description {
+            font-size: 12px;
+        }
     }
-}
 </style>
